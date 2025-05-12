@@ -1,0 +1,44 @@
+from hari import *
+
+
+def transformacao_2(parametros, spark, logger, df):
+    return df
+
+
+def transformacao_1(parametros, spark, logger, df):
+    return df
+
+
+def main(params):
+
+    spark = hari.criaSessaoSpark(spark, salvarMetricas=True, nivelLogSpark="ERROR", "job_fato_tabela") 
+    logger = hari.log(NIVEL="ERROR")
+    parametros = params
+    
+    # se passar a sessao do spark, usa, senao cria
+    # se True salvarMetricas, vai coletar as metricas do measure
+
+    hari.metadados.incluirDependenciaOrigem("silver.tabela4")
+    hari.metadados.incluirDependenciaOrigem("silver.tabela5")
+
+    logger.info("Inicia a Execucao do Job")
+
+    logger.info("Ingestão dos dados")
+    df1 = hari.leituraTabela("silver.tabela4", filtros = "", tipo = "catalog")
+    df2 = hari.leituraTabela("silver.tabela5", filtros = "", tipo = "catalog")
+
+
+    logger.info("ETL")
+    df1 = transformacao_1(parametros, spark, logger, df1)
+
+    df3 = transformacao_2(parametros, spark, logger, df3)
+    
+
+    logger.info("Carga dos Dados")
+    hari.salvarTabela("gold.fato_tabela", formato="delta")
+
+    hari.metadados.incluirDependenciaDestino("gold.fato_tabela")
+
+    hari.metadados.informarConclusaoJob("A1.gold.job_fato_tabela")
+
+    hari.encerraSessaoSpark()

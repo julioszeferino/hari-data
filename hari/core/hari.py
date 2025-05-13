@@ -3,15 +3,22 @@
 
 from pyspark.sql import SparkSession, DataFrame
 
+from spark_stage_metrics import StageMetrics
+
 from typing import Optional, Literal
 
 class Hari:
     """
     
     """
-    def __init__(self, spark_session, save_metrics):
+    def __init__(self, spark_session, save_metrics = False, stagemetrics = None):
         self.__spark_session: SparkSession = spark_session
         self.__save_metrics: bool = save_metrics
+        self.__stagemetrics: StageMetrics = stagemetrics
+
+    @property
+    def stagemetrics(self) -> StageMetrics:
+        return self.__stagemetrics
 
     
     def load_table(
@@ -47,7 +54,8 @@ class Hari:
     
 
     def _load_path_table() -> DataFrame:
-        
+        pass
+
         
         
 

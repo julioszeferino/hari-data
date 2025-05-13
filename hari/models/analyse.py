@@ -1,1 +1,0 @@
-# TODO: analises de profilling
